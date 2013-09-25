@@ -259,7 +259,10 @@ module Sixword
     "WORM",  "WORN",  "WOVE",  "WRIT",  "WYNN",  "YALE",  "YANG",  "YANK",
     "YARD",  "YARN",  "YAWL",  "YAWN",  "YEAH",  "YEAR",  "YELL",  "YOGA",
     "YOKE"   ]
+
+  # mutability sucks
   WORDS.freeze
+  WORDS.each(&:freeze)
 
   WORDS_HASH = Hash[WORDS.each_with_index.to_a]
   WORDS_HASH.freeze
