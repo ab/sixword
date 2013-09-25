@@ -108,26 +108,13 @@ module Sixword
     decode(string_or_words, padding_ok: true)
   end
 
-  def self.hex_encode(hex_string)
-    hex_encode_iter(hex_string).to_a
-  end
-
-  def self.hex_encode_iter(hex_string)
-    unless block_given?
-      return Enumerator.new(self, :hex_encode_iter, hex_string)
-    end
-    int = Integer(hex_string.gsub(/[^a-fA-F0-9]/, ''), 16)
-    arr = []
-
-    while int > 0
-      arr.unshift (int & 255)
-      int >>= 8
+  def self.hex_string_to_byte_string(hex_string)
+    # strip whitespace, make sure it's valid hex
+    hex_string = hex_string.gsub(/\s+/, '')
+    if hex_string =~ /[^a-fA-F0-9]/
+      raise ArgumentError.new("Invalid value for hex: #{hex_string.inspect}")
     end
 
-    arr.each_slice(8) do |slice|
-      Lib.encode_64_bits(slice).each do |word|
-        yield word
-      end
-    end
+    [hex_string].pack('H*')
   end
 end
