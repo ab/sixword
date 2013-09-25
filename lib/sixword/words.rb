@@ -1,7 +1,7 @@
 module Sixword
 
   # Dictionary from RFC 2289 Appendix D
-  # http://tools.ietf.org/html/rfc2289
+  # http://tools.ietf.org/html/rfc2289#appendix-D
   WORDS = [  "A",     "ABE",   "ACE",   "ACT",   "AD",    "ADA",   "ADD",
     "AGO",   "AID",   "AIM",   "AIR",   "ALL",   "ALP",   "AM",    "AMY",
     "AN",    "ANA",   "AND",   "ANN",   "ANT",   "ANY",   "APE",   "APS",
