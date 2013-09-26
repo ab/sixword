@@ -1,3 +1,5 @@
+require_relative 'sixword/cli'
+require_relative 'sixword/hex'
 require_relative 'sixword/lib'
 require_relative 'sixword/version'
 require_relative 'sixword/words'
@@ -106,15 +108,5 @@ module Sixword
 
   def self.pad_decode(string_or_words)
     decode(string_or_words, padding_ok: true)
-  end
-
-  def self.hex_string_to_byte_string(hex_string)
-    # strip whitespace, make sure it's valid hex
-    hex_string = hex_string.gsub(/\s+/, '')
-    if hex_string =~ /[^a-fA-F0-9]/
-      raise ArgumentError.new("Invalid value for hex: #{hex_string.inspect}")
-    end
-
-    [hex_string].pack('H*')
   end
 end

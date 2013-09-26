@@ -1,0 +1,103 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative '../lib/sixword'
+
+BaseName = File.basename($0)
+
+def puts_err(message)
+  $stderr.puts(BaseName + ': ' + message)
+end
+
+def parse_args
+  options = {}
+  optparse = OptionParser.new do |opts|
+    opts.banner = <<-EOM
+usage: #{BaseName} [OPTION]... [FILE]
+
+Six-word encode or decode FILE, or standard input, to standard output.
+
+The data are encoded using the 2048 word dictionary created for S/Key (tm) and
+standardized by RFC 2289, RFC 1760, and RFC 1751. It also supports an optional
+custom padding scheme to allow for messages that are not a multiple of 8 bytes.
+
+With no FILE, or when FILE is -, read standard input.
+
+#{BaseName} understands a few different styles of hexadecimal input and output.
+When encoding, the input will first be decoded to binary data before being
+encoded to words. When decoding, the output will be encoded in hex.
+
+
+Hex styles:
+
+  lower:
+    Accept a variety of inputs, but don't include whitespace in output.
+
+    Encoding:
+      '48:69:20:77:6f:72:6c:64' => 'Hi world' => 'ACRE ADEN INN SLID MAD PAP'
+    Decoding:
+      'ACRE ADEN INN SLID MAD PAP' => 'Hi world' => '486920776f726c64'
+
+  fingerprint:
+    Accept a variety of inputs, and include whitespace in output.
+    This is intended to look something like GPG fingerprints.
+
+    Encoding:
+      '4869 2077 6F72 6C64' => 'Hi world' => 'ACRE ADEN INN SLID MAP PAP'
+    Decoding:
+      'ACRE ADEN INN SLID MAP PAP' => 'Hi world' => '4869 2077 6F72 6C64'
+
+
+Options:
+    EOM
+
+    opts.on('-h', '--help', 'Display this message', ' ') do
+      $stderr.puts opts, ''
+      exit 0
+    end
+
+    #
+
+    opts.on('-d', '--decode', 'Decode data') do
+      options[:mode] = :decode
+    end
+
+    opts.on('-p', '--pad', 'Use custom padding scheme', ' ') do
+      options[:pad] = true
+    end
+
+    #
+
+    opts.on('-S', '--hex-style STYLE',
+            'Treat input (when encoding) or print',
+            'output (when decoding) as hex') do |style|
+      options[:hex_style] = style
+    end
+
+    opts.on('-H', '--hex', 'Short for --hex-style lower') do
+      options[:hex_style] = 'lower'
+    end
+
+    opts.on('-f', '--fingerprint', 'Short for --hex-style fingerprint') do
+      options[:hex_style] = 'fingerprint'
+    end
+  end
+
+  optparse.parse!
+
+  case ARGV.length
+  when 0
+    filename = '-'
+  when 1
+    filename = ARGV.fetch(0)
+  else
+    $stderr.puts optparse, ''
+    puts_err "extra operand #{ARGV.fetch(1).inspect}"
+    exit 1
+  end
+
+  runner = Sixword::CLI.new(filename, options)
+  runner.run!
+end
+
+parse_args

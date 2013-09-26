@@ -5,7 +5,7 @@ describe Sixword do
     Sixword::TestVectors::HexTests.each do |section, tests|
       tests.each do |hex, sentence|
         words = sentence.split
-        byte_string = Sixword.hex_string_to_byte_string(hex)
+        byte_string = Sixword::Hex.decode(hex)
         debug_puts "Encode 0x#{hex} => #{words.inspect}"
         Sixword.encode(byte_string).should == words
       end
@@ -16,7 +16,7 @@ describe Sixword do
     Sixword::TestVectors::HexTests.each do |section, tests|
       tests.each do |hex, sentence|
         words = sentence.split
-        byte_string = Sixword.hex_string_to_byte_string(hex)
+        byte_string = Sixword::Hex.decode(hex)
         debug_puts "Decode #{words.inspect} => 0x#{hex}"
         Sixword.decode(words).should == byte_string
       end
@@ -49,7 +49,7 @@ describe Sixword do
     Sixword::TestVectors::HexTests.fetch('rfc 1751').each do |hex, sentence|
       # group into 6-word sentences
       sentences = sentence.split.each_slice(6).map {|s| s.join(' ')}
-      byte_string = Sixword.hex_string_to_byte_string(hex)
+      byte_string = Sixword::Hex.decode(hex)
       debug_puts "Encoding #{hex.inspect} to sentences"
       debug_puts " => #{sentences.inspect}"
       Sixword.encode_to_sentences(byte_string).should == sentences
@@ -71,7 +71,7 @@ describe Sixword do
        "6C617A7920646F672E" =>
        "The quick brown fox jumps over the lazy dog.",
     }.each do |hex_string, byte_string|
-      Sixword.hex_string_to_byte_string(hex_string).should == byte_string
+      Sixword::Hex.decode(hex_string).should == byte_string
     end
   end
 end
