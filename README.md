@@ -9,6 +9,8 @@ keys where humans must communicate or enter the values.
 
 ## Comparison to other encodings
 
+See also: Bubble Babble, PGP Word List, Diceware, Base64, Base32
+
 - Bubble Babble does not use full words, so it is more difficult for humans to
   type or communicate over the phone.
 
@@ -27,8 +29,6 @@ keys where humans must communicate or enter the values.
 - Base32 is somewhat better for humans than Base64 because it is case
   insensitive and doesn't include 0 or 1. However it is still not very
   convenient for humans to type or visually inspect.
-
-See also: Bubble Babble, PGP Word List, Diceware, Base64, Base32
 
 ## Installation
 
