@@ -114,10 +114,10 @@ describe Sixword::Hex do
   end
 
   it 'should reject invalid hex characters' do
-    'g'..'z'.each do |c|
+    ('g'..'z').each do |c|
       Sixword::Hex.valid_hex?(c).should == false
     end
-    'G'..'Z'.each do |c|
+    ('G'..'Z').each do |c|
       Sixword::Hex.valid_hex?(c).should == false
     end
   end
