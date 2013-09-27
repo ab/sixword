@@ -36,18 +36,25 @@ module Sixword
       options[:hex_style]
     end
 
-    def print_hex(data, first_chunk)
+    def print_hex(data, chunk_index, cols=80)
       case hex_style
       when 'lower', 'lowercase'
         # encode to lowercase hex with no newlines
         print Sixword::Hex.encode(data)
       when 'finger', 'fingerprint'
         # encode to GPG fingerprint like hex with newlines
-        print "\n" unless first_chunk
+        newlines_every = cols / 5
+        if chunk_index != 0
+          if chunk_index % newlines_every == 0
+            print "\n"
+          else
+            print ' '
+          end
+        end
         print Sixword::Hex.encode_fingerprint(data)
       when 'colon', 'colons'
         # encode to SSL/SSH fingerprint like hex with colons
-        print ':' unless first_chunk
+        print ':' unless chunk_index == 0
         print Sixword::Hex.encode_colons(data)
       end
     end
@@ -58,36 +65,48 @@ module Sixword
           puts encoded
         end
       else
-        first_chunk = true
+        chunk_index = 0
         do_decode! do |decoded|
           if hex_style
-            print_hex(decoded, first_chunk)
-            first_chunk = false if first_chunk
+            print_hex(decoded, chunk_index)
+            chunk_index += 1
           else
             print decoded
           end
         end
-        # trailing newline
-        puts
+
+        # add trailing newline for hex output
+        puts if hex_style
       end
     end
 
     private
 
+    def do_decode!
+      unless block_given?
+        raise ArgumentError.new("block is required")
+      end
+
+      arr = []
+      read_input_by_6_words do |arr|
+        yield Sixword.decode(arr, padding_ok: pad?)
+      end
+    end
+
     def do_encode!
-      process_input do |chunk|
+      process_encode_input do |chunk|
         Sixword.encode_iter(chunk, words_per_slice:6, pad:pad?) do |encoded|
           yield encoded
         end
       end
     end
 
-    def process_input
+    def process_encode_input
       unless block_given?
-        raise ArgumentError.new("must pass block")
+        raise ArgumentError.new("block is required")
       end
 
-      if encoding? && hex_style
+      if hex_style
         # yield data in chunks from accumulate_hex_input until EOF
         accumulate_hex_input do |hex|
           begin
@@ -100,16 +119,44 @@ module Sixword
           end
         end
       else
+        # yield data 8 bytes at a time until EOF
         while true
-          # yield data 8 bytes at a time until EOF
           buf = stream.read(8)
-          yield buf
-
-          if buf.length < 8
+          if buf
+            yield buf
+          else
             # EOF
             break
           end
         end
+      end
+    end
+
+    # Yield data 6 words at a time until EOF
+    def read_input_by_6_words
+      block_size = 2048
+      word_arr = []
+
+      while true
+        buf = stream.read(block_size)
+        if buf.nil?
+          break #EOF
+        end
+
+        buf.scan(/\S+/) do |word|
+          word_arr << word
+
+          # return the array if we have accumulated 6 words
+          if word_arr.length == 6
+            yield word_arr
+            word_arr.clear
+          end
+        end
+      end
+
+      # yield whatever we have left, if anything
+      if !word_arr.empty?
+        yield word_arr
       end
     end
 

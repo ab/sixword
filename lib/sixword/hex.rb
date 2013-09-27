@@ -19,15 +19,15 @@ module Sixword
     end
 
     def self.encode_slice(bytes, slice, delimiter)
-      encode_hex(bytes).each_char.each_slice(slice).map(&:join).join(delimiter)
+      encode(bytes).each_char.each_slice(slice).map(&:join).join(delimiter)
     end
 
     def self.encode_fingerprint(bytes)
-      encode_hex_slice(bytes, 4, ' ').upcase
+      encode_slice(bytes, 4, ' ').upcase
     end
 
     def self.encode_colons(bytes)
-      encode_hex_slice(bytes, 2, ':')
+      encode_slice(bytes, 2, ':')
     end
 
     def self.decode(hex_string, strip_chars=true)

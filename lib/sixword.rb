@@ -46,6 +46,10 @@ module Sixword
     words_per_slice = options.fetch(:words_per_slice)
     pad = options.fetch(:pad)
 
+    unless byte_string
+      raise ArgumentError.new("byte_string is falsy")
+    end
+
     unless block_given?
       return Enumerator.new(self, :encode_iter, byte_string, options)
     end

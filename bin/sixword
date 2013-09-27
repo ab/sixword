@@ -10,7 +10,7 @@ def puts_err(message)
 end
 
 def parse_args
-  options = {}
+  options = {pad: true}
   optparse = OptionParser.new do |opts|
     opts.banner = <<-EOM
 usage: #{BaseName} [OPTION]... [FILE]
@@ -30,7 +30,7 @@ encoded to words. When decoding, the output will be encoded in hex.
 
 Hex styles:
 
-  lower:
+  lower/lowercase:
     Accept a variety of inputs, but don't include whitespace in output.
 
     Encoding:
@@ -38,7 +38,7 @@ Hex styles:
     Decoding:
       'ACRE ADEN INN SLID MAD PAP' => 'Hi world' => '486920776f726c64'
 
-  fingerprint:
+  finger/fingerprint:
     Accept a variety of inputs, and include whitespace in output.
     This is intended to look something like GPG fingerprints.
 
@@ -62,8 +62,8 @@ Options:
       options[:mode] = :decode
     end
 
-    opts.on('-p', '--pad', 'Use custom padding scheme', ' ') do
-      options[:pad] = true
+    opts.on('-p', '--no-pad', "Don't use custom padding scheme", ' ') do
+      options[:pad] = false
     end
 
     #
@@ -74,8 +74,8 @@ Options:
       options[:hex_style] = style
     end
 
-    opts.on('-H', '--hex', 'Short for --hex-style lower') do
-      options[:hex_style] = 'lower'
+    opts.on('-H', '--hex', 'Short for --hex-style lowercase') do
+      options[:hex_style] = 'lowercase'
     end
 
     opts.on('-f', '--fingerprint', 'Short for --hex-style fingerprint') do
@@ -96,8 +96,28 @@ Options:
     exit 1
   end
 
-  runner = Sixword::CLI.new(filename, options)
-  runner.run!
+  begin
+    runner = Sixword::CLI.new(filename, options)
+    runner.run!
+  rescue Sixword::CLI::CLIError => err
+    puts_err err.message
+    exit 2
+  rescue Sixword::InvalidParity => err
+    puts_err err.message
+    exit 3
+  rescue Sixword::UnknownWord => err
+    puts_err err.message
+    exit 4
+  rescue Sixword::InvalidWord => err
+    puts_err err.message
+    exit 5
+  rescue Sixword::InputError => err
+    puts_err err.message
+    exit 10
+  rescue Interrupt
+    $stderr.puts
+    exit 130 # not actually the same as signalled exit, but oh well
+  end
 end
 
 parse_args
