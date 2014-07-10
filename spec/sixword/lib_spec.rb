@@ -16,7 +16,17 @@ describe Sixword::Lib do
       %w{ROME MUG FRED SCAN LIVE LACE} => 0xD1854218EBBB0B51,
     }.each do |words, int|
       debug_puts "Decoding 6-word array: #{words.inspect}"
-      Sixword::Lib.decode_6_words(words, false).should == int
+      Sixword::Lib.decode_6_words(words, false).should == [int, 8]
     end
+  end
+
+
+  it 'should convert byte arrays to ints' do
+    Sixword::Lib.byte_array_to_int([1, 2]).should == 258
+  end
+
+  it 'should convert ints to byte arrays' do
+    Sixword::Lib.int_to_byte_array(258).should == [1, 2]
+    Sixword::Lib.int_to_byte_array(258, 3).should == [0, 1, 2]
   end
 end

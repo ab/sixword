@@ -56,11 +56,22 @@ describe Sixword do
     end
   end
 
-  it 'should handle null bytes correctly' do
+  it 'should handle all null bytes correctly' do
     binary = "\0" * 8
     encoded = ['A'] * 6
     Sixword.encode(binary).should == encoded
     Sixword.decode(encoded).should == binary
+  end
+
+  it 'should handle padded null bytes correctly' do
+    {
+      "\0\0\0foo" => ["A", "A", "HAY", "SLEW", "TROT", "A2"],
+      "\0\0\0foo\0\0" => ["A", "A", "HAY", "SLEW", "TROT", "A"],
+      "foo\0\0" => ["CHUB", "EMIL", "MUDD", "A", "A", "A3"],
+    }.each do |binary, encoded|
+      Sixword.pad_encode(binary).should == encoded
+      Sixword.pad_decode(encoded).should == binary
+    end
   end
 
   it 'should convert hex strings to byte strings' do

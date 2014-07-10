@@ -65,7 +65,7 @@ module Sixword
       # omit padding bits, if any
       int >>= padding * 8
 
-      int
+      [int, 8 - padding]
     end
 
     # Extract the padding from a word, e.g. 'WORD3' => 'WORD', 3
@@ -78,7 +78,8 @@ module Sixword
     end
 
     def self.decode_6_words_to_bstring(word_array, padding_ok)
-      int_to_byte_array(decode_6_words(word_array, padding_ok)).map(&:chr).join
+      int_to_byte_array(*decode_6_words(word_array, padding_ok)).
+        map(&:chr).join
     end
 
     def self.word_to_bits(word)
@@ -119,6 +120,17 @@ module Sixword
       parity & 0b11
     end
 
+    # Given an array of bytes, pack them into a single Integer.
+    #
+    # For example:
+    #
+    #     >> byte_array_to_int([1, 2])
+    #     => 258
+    #
+    # @param byte_array [Array<Fixnum>]
+    #
+    # @return Integer
+    #
     def self.byte_array_to_int(byte_array)
       int = 0
       byte_array.each do |byte|
@@ -128,7 +140,23 @@ module Sixword
       int
     end
 
-    def self.int_to_byte_array(int)
+    # Given an Integer, unpack it into an array of bytes.
+    #
+    # For example:
+    #
+    #     >> int_to_byte_array(258)
+    #     => [1, 2]
+    #
+    #     >> int_to_byte_array(258, 3)
+    #     => [0, 1, 2]
+    #
+    # @param int [Integer]
+    # @param length [Integer] (nil) Left zero padded size of byte array to
+    #   return. If not provided, no leading zeroes will be added.
+    #
+    # @return Array<Fixnum>
+    #
+    def self.int_to_byte_array(int, length=nil)
       unless int >= 0
         raise ArgumentError.new("Not sure what to do with negative numbers")
       end
@@ -138,6 +166,15 @@ module Sixword
       while int > 0
         arr << (int & 255)
         int >>= 8
+      end
+
+      # pad to appropriate length with leading zeroes
+      if length
+        raise ArgumentError.new("Cannot pad to length < 0") if length < 0
+
+        while arr.length < length
+          arr << 0
+        end
       end
 
       arr.reverse!
