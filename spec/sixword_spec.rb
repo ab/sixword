@@ -56,6 +56,13 @@ describe Sixword do
     end
   end
 
+  it 'should handle null bytes correctly' do
+    binary = "\0" * 8
+    encoded = ['A'] * 6
+    Sixword.encode(binary).should == encoded
+    Sixword.decode(encoded).should == binary
+  end
+
   it 'should convert hex strings to byte strings' do
     {"03e755bf6982fa55" => "\x03\xe7\x55\xbf\x69\x82\xfa\x55",
      "19dd19a502ca2d60" => "\x19\xdd\x19\xa5\x02\xca\x2d\x60",
