@@ -1,3 +1,4 @@
+# coding: binary
 require_relative 'rspec_helper'
 
 describe Sixword do
