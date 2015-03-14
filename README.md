@@ -1,5 +1,7 @@
 # Sixword
 
+![Build status](https://travis-ci.org/ab/sixword.svg)
+
 Sixword implements the 6-word binary encoding created for S/Key (tm) and
 standardized by RFC 2289, RFC 1760, and RFC 1751. Binary data may be
 encoded using a dictionary of 2048 English words of 1-4 characters in
