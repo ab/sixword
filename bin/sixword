@@ -62,6 +62,10 @@ Options:
       options[:mode] = :decode
     end
 
+    opts.on('-e', '--encode', 'Encode data (default)') do
+      options[:mode] = :encode
+    end
+
     opts.on('-p', '--no-pad', "Don't use custom padding scheme", ' ') do
       options[:pad] = false
     end
