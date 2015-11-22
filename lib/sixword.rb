@@ -6,13 +6,28 @@ require_relative 'sixword/words'
 
 # Sixword, a binary encoder using the 6-word scheme from S/key standardized by
 # RFC 2289, RFC 1760, and RFC 1751.
+#
+# All of the public methods are static methods on the Sixword module, for
+# example {Sixword.encode} and {Sixword.decode}.
+#
+# The <tt>sixword</tt> command line interface and corresponding {Sixword::CLI}
+# class is also very convenient for more complex use. It supports a variety of
+# different styles for translating binary data and hexadecimal fingerprints.
+#
+# These hexadecimal methods are implemented in the {Sixword::Hex} module.
+#
 module Sixword
 
   # Parent class for inputs that could plausibly occur at runtime.
   class InputError < ArgumentError; end
 
+  # Raised when the parity check fails
   class InvalidParity < InputError; end
+
+  # Raised in decoding when an unrecognized word is encountered
   class UnknownWord < InputError; end
+
+  # Raised in decoding when a word of invalid format is encountered
   class InvalidWord < InputError; end
 
   # Encode a string of bytes in six-word encoding. If you want to use the
@@ -36,7 +51,7 @@ module Sixword
 
   # Encode a string of bytes in six-word encoding, using the custom padding
   # scheme established by this library. The output will be identical to
-  # Sixword.encode for strings that are a multiple of 8 in length.
+  # {Sixword.encode} for strings that are a multiple of 8 in length.
   #
   # @param byte_string [String] A string of any length
   # @return [Array<String>] an array of string words
@@ -57,7 +72,7 @@ module Sixword
     alias_method :pad_encode_to_a, :pad_encode
   end
 
-  # Like Sixword.encode, but return six words at a time (a complete block).
+  # Like {Sixword.encode}, but return six words at a time (a complete block).
   #
   # @param byte_string [String] Length must be a multiple of 8
   # @return [Array<String>] an array of 6-word string sentences
@@ -75,7 +90,7 @@ module Sixword
     encode_iter(byte_string, words_per_slice:6).to_a
   end
 
-  # Like Sixword.encode, but return a single string.
+  # Like {Sixword.encode}, but return a single string.
   #
   # @param byte_string [String] Length must be a multiple of 8
   # @return [String] a string of words separated by spaces
@@ -92,7 +107,7 @@ module Sixword
     encode(byte_string).join(' ')
   end
 
-  # Like Sixword.encode_to_sentences, but allow variable length input.
+  # Like {Sixword.encode_to_sentences}, but allow variable length input.
   #
   # @param byte_string [String] A string of any length
   # @return [Array<String>] an array of 6-word string sentences
@@ -105,7 +120,7 @@ module Sixword
     encode_iter(byte_string, words_per_slice:6, pad:true).to_a
   end
 
-  # Like Sixword.encode_to_s, but allow variable length input.
+  # Like {Sixword.encode_to_s}, but allow variable length input.
   #
   # @param byte_string [String] A string of any length
   # @return [String] a string of words separated by spaces
@@ -205,6 +220,10 @@ module Sixword
   #   => "Hi world"
   #
   # @example
+  #   >> Sixword.decode("acre aden inn slid mad pap")
+  #   => "Hi world"
+  #
+  # @example
   #   Sixword.decode(%w{ACRE ADEN INN SLID MAD PAP})
   #   => "Hi world"
   #
@@ -239,7 +258,7 @@ module Sixword
     bstring
   end
 
-  # Like Sixword.decode, but allow input to contain custom padding scheme.
+  # Like {Sixword.decode}, but allow input to contain custom padding scheme.
   #
   # @see Sixword.decode
   #
