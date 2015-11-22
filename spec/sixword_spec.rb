@@ -3,7 +3,7 @@ require_relative 'rspec_helper'
 
 describe Sixword do
   it 'should encode RFC hex vectors correctly' do
-    Sixword::TestVectors::HexTests.each do |section, tests|
+    Sixword::TestVectors::HexTests.each do |_section, tests|
       tests.each do |hex, sentence|
         words = sentence.split
         byte_string = Sixword::Hex.decode(hex)
@@ -14,7 +14,7 @@ describe Sixword do
   end
 
   it 'should decode RFC vectors to hex correctly' do
-    Sixword::TestVectors::HexTests.each do |section, tests|
+    Sixword::TestVectors::HexTests.each do |_section, tests|
       tests.each do |hex, sentence|
         words = sentence.split
         byte_string = Sixword::Hex.decode(hex)
@@ -25,13 +25,13 @@ describe Sixword do
   end
 
   it 'should decode with correct parity' do
-    Sixword::TestVectors::ParityTest.find_all {|k, v| v}.each do |sentence, _|
+    Sixword::TestVectors::ParityTest.find_all {|_k, v| v}.each do |sentence, _|
       debug_puts "correct parity: #{sentence.inspect}"
       expect { Sixword.decode(sentence) }.to_not raise_error
     end
   end
   it 'should raise with incorrect parity' do
-    Sixword::TestVectors::ParityTest.find_all {|k, v| !v}.each do |sentence, _|
+    Sixword::TestVectors::ParityTest.find_all {|_k, v| !v}.each do |sentence, _|
       debug_puts "incorrect parity: #{sentence.inspect}"
       expect { Sixword.decode(sentence) }.
         to raise_error(Sixword::InvalidParity)
