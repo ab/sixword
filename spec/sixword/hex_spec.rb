@@ -89,37 +89,37 @@ describe Sixword::Hex do
   it 'should decode and encode random hex strings correctly' do
     TestCases.each do |binary, hexes|
       lower, finger, colons = hexes
-      Sixword::Hex.encode(binary).should == lower
-      Sixword::Hex.decode(lower).should == binary
+      expect(Sixword::Hex.encode(binary)).to eq(lower)
+      expect(Sixword::Hex.decode(lower)).to eq(binary)
     end
   end
 
   it 'should decode and encode random hex fingerprints correctly' do
     TestCases.each do |binary, hexes|
       lower, finger, colons = hexes
-      Sixword::Hex.encode_fingerprint(binary).should == finger
-      Sixword::Hex.decode(finger).should == binary
+      expect(Sixword::Hex.encode_fingerprint(binary)).to eq(finger)
+      expect(Sixword::Hex.decode(finger)).to eq(binary)
     end
   end
 
   it 'should decode and encode random colon hexes correctly' do
     TestCases.each do |binary, hexes|
       lower, finger, colons = hexes
-      Sixword::Hex.encode_colons(binary).should == colons
-      Sixword::Hex.decode(colons).should == binary
+      expect(Sixword::Hex.encode_colons(binary)).to eq(colons)
+      expect(Sixword::Hex.decode(colons)).to eq(binary)
     end
   end
 
   it 'should accept all valid hex characters' do
-    Sixword::Hex.valid_hex?('abcdefABCDEF0123456789').should == true
+    expect(Sixword::Hex.valid_hex?('abcdefABCDEF0123456789')).to eq(true)
   end
 
   it 'should reject invalid hex characters' do
     ('g'..'z').each do |c|
-      Sixword::Hex.valid_hex?(c).should == false
+      expect(Sixword::Hex.valid_hex?(c)).to eq(false)
     end
     ('G'..'Z').each do |c|
-      Sixword::Hex.valid_hex?(c).should == false
+      expect(Sixword::Hex.valid_hex?(c)).to eq(false)
     end
   end
 end

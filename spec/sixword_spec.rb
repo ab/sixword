@@ -8,7 +8,7 @@ describe Sixword do
         words = sentence.split
         byte_string = Sixword::Hex.decode(hex)
         debug_puts "Encode 0x#{hex} => #{words.inspect}"
-        Sixword.encode(byte_string).should == words
+        expect(Sixword.encode(byte_string)).to eq(words)
       end
     end
   end
@@ -19,7 +19,7 @@ describe Sixword do
         words = sentence.split
         byte_string = Sixword::Hex.decode(hex)
         debug_puts "Decode #{words.inspect} => 0x#{hex}"
-        Sixword.decode(words).should == byte_string
+        expect(Sixword.decode(words)).to eq(byte_string)
       end
     end
   end
@@ -53,15 +53,15 @@ describe Sixword do
       byte_string = Sixword::Hex.decode(hex)
       debug_puts "Encoding #{hex.inspect} to sentences"
       debug_puts " => #{sentences.inspect}"
-      Sixword.encode_to_sentences(byte_string).should == sentences
+      expect(Sixword.encode_to_sentences(byte_string)).to eq(sentences)
     end
   end
 
   it 'should handle all null bytes correctly' do
     binary = "\0" * 8
     encoded = ['A'] * 6
-    Sixword.encode(binary).should == encoded
-    Sixword.decode(encoded).should == binary
+    expect(Sixword.encode(binary)).to eq(encoded)
+    expect(Sixword.decode(encoded)).to eq(binary)
   end
 
   it 'should handle padded null bytes correctly' do
@@ -70,8 +70,8 @@ describe Sixword do
       "\0\0\0foo\0\0" => ["A", "A", "HAY", "SLEW", "TROT", "A"],
       "foo\0\0" => ["CHUB", "EMIL", "MUDD", "A", "A", "A3"],
     }.each do |binary, encoded|
-      Sixword.pad_encode(binary).should == encoded
-      Sixword.pad_decode(encoded).should == binary
+      expect(Sixword.pad_encode(binary)).to eq(encoded)
+      expect(Sixword.pad_decode(encoded)).to eq(binary)
     end
   end
 
@@ -90,7 +90,7 @@ describe Sixword do
        "6C617A7920646F672E" =>
        "The quick brown fox jumps over the lazy dog.",
     }.each do |hex_string, byte_string|
-      Sixword::Hex.decode(hex_string).should == byte_string
+      expect(Sixword::Hex.decode(hex_string)).to eq(byte_string)
     end
   end
 end
