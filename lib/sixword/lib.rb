@@ -154,7 +154,7 @@ module Sixword
     # @param length [Integer] (nil) Left zero padded size of byte array to
     #   return. If not provided, no leading zeroes will be added.
     #
-    # @return Array<Fixnum>
+    # @return [Array<Fixnum>]
     #
     def self.int_to_byte_array(int, length=nil)
       unless int >= 0

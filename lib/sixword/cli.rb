@@ -1,9 +1,33 @@
 module Sixword
+
+  # The Sixword::CLI class implements all of the complex processing needed for
+  # the sixword Command Line Interface.
   class CLI
+
+    # Exception for certain input validation errors
     class CLIError < StandardError; end
 
-    attr_reader :filename, :options, :stream, :mode
+    # @return [String] Input filename
+    attr_reader :filename
 
+    # @return [Hash] Options hash
+    attr_reader :options
+
+    # @return [File, IO] Stream opened from #filename
+    attr_reader :stream
+
+    # @return [:encode, :decode]
+    attr_reader :mode
+
+    # Create a Sixword CLI to operate on filename with options
+    #
+    # @param filename [String] Input file name (or '-' for stdin)
+    # @param options [Hash]
+    #
+    # @option options [:encode, :decode] :mode (:encode)
+    # @option options [Boolean] :pad (false)
+    # @option options [String] :hex_style
+    #
     def initialize(filename, options)
       @filename = filename
       @options = {mode: :encode, pad: false}.merge(options)
@@ -24,18 +48,25 @@ module Sixword
       end
     end
 
+    # Return the value of the :pad option.
+    # @return [Boolean]
     def pad?
       options.fetch(:pad)
     end
 
+    # Return true if we are in encoding mode, false otherwise (decoding).
+    # @return [Boolean]
     def encoding?
       mode == :encode
     end
 
+    # Return the value of the :hex_style option.
+    # @return [String, nil]
     def hex_style
       options[:hex_style]
     end
 
+    # Format data as hex in various styles.
     def print_hex(data, chunk_index, cols=80)
       case hex_style
       when 'lower', 'lowercase'
@@ -59,6 +90,7 @@ module Sixword
       end
     end
 
+    # Run the encoding/decoding operation, printing the result to stdout.
     def run!
       if encoding?
         do_encode! do |encoded|
@@ -87,7 +119,6 @@ module Sixword
         raise ArgumentError.new("block is required")
       end
 
-      arr = []
       read_input_by_6_words do |arr|
         yield Sixword.decode(arr, padding_ok: pad?)
       end

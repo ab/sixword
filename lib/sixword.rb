@@ -4,6 +4,8 @@ require_relative 'sixword/lib'
 require_relative 'sixword/version'
 require_relative 'sixword/words'
 
+# Sixword, a binary encoder using the 6-word scheme from S/key standardized by
+# RFC 2289, RFC 1760, and RFC 1751.
 module Sixword
 
   # Parent class for inputs that could plausibly occur at runtime.
@@ -14,11 +16,16 @@ module Sixword
   class InvalidWord < InputError; end
 
   def self.encode(byte_string)
-    encode_to_a(byte_string)
+    encode_iter(byte_string).to_a
   end
 
   def self.pad_encode(byte_string)
-    pad_encode_to_a(byte_string)
+    encode_iter(byte_string, words_per_slice:1, pad:true).to_a
+  end
+
+  class << self
+    alias_method :encode_to_a, :encode
+    alias_method :pad_encode_to_a, :pad_encode
   end
 
   def self.encode_to_sentences(byte_string)
@@ -27,14 +34,6 @@ module Sixword
 
   def self.encode_to_s(byte_string)
     encode(byte_string).join(' ')
-  end
-
-  def self.encode_to_a(byte_string)
-    encode_iter(byte_string).to_a
-  end
-
-  def self.pad_encode_to_a(byte_string)
-    encode_iter(byte_string, words_per_slice:1, pad:true).to_a
   end
 
   def self.pad_encode_to_sentences(byte_string)
