@@ -51,7 +51,7 @@ module Sixword
     end
 
     unless block_given?
-      return Enumerator.new(self, :encode_iter, byte_string, options)
+      return to_enum(__method__, byte_string, options)
     end
 
     if !pad && byte_string.bytesize % 8 != 0
