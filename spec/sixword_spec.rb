@@ -1,7 +1,6 @@
 # coding: binary
-require_relative 'rspec_helper'
 
-describe Sixword do
+RSpec.describe Sixword do
   it 'should encode RFC hex vectors correctly' do
     Sixword::TestVectors::HexTests.each do |_section, tests|
       tests.each do |hex, sentence|

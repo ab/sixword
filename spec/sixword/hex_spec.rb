@@ -1,7 +1,6 @@
 # coding: binary
-require_relative '../rspec_helper'
 
-describe Sixword::Hex do
+RSpec.describe Sixword::Hex do
   TestCases = {
     "\x73\xe2\x16\xb5\x36\x3f\x23\x77" => [
       "73e216b5363f2377",
@@ -88,7 +87,7 @@ describe Sixword::Hex do
 
   it 'should decode and encode random hex strings correctly' do
     TestCases.each do |binary, hexes|
-      lower, finger, colons = hexes
+      lower, _finger, _colons = hexes
       expect(Sixword::Hex.encode(binary)).to eq(lower)
       expect(Sixword::Hex.decode(lower)).to eq(binary)
     end
@@ -96,7 +95,7 @@ describe Sixword::Hex do
 
   it 'should decode and encode random hex fingerprints correctly' do
     TestCases.each do |binary, hexes|
-      lower, finger, colons = hexes
+      _lower, finger, _colons = hexes
       expect(Sixword::Hex.encode_fingerprint(binary)).to eq(finger)
       expect(Sixword::Hex.decode(finger)).to eq(binary)
     end
@@ -104,7 +103,7 @@ describe Sixword::Hex do
 
   it 'should decode and encode random colon hexes correctly' do
     TestCases.each do |binary, hexes|
-      lower, finger, colons = hexes
+      _lower, _finger, colons = hexes
       expect(Sixword::Hex.encode_colons(binary)).to eq(colons)
       expect(Sixword::Hex.decode(colons)).to eq(binary)
     end

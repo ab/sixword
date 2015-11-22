@@ -1,6 +1,4 @@
-require_relative '../rspec_helper'
-
-describe Sixword::Lib do
+RSpec.describe Sixword::Lib do
   it 'should encode 64 bits correctly' do
     {
       [0xd1, 0x85, 0x42, 0x18, 0xeb, 0xbb, 0x0b, 0x51] =>
