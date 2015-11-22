@@ -55,6 +55,10 @@ Options:
       $stderr.puts opts, ''
       exit 0
     end
+    opts.on('-v', '--version', 'Print version number', ' ') do
+      puts 'sixword ' + Sixword::VERSION
+      exit 0
+    end
 
     #
 
