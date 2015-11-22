@@ -1,6 +1,9 @@
 # Sixword
 
-![Build status](https://travis-ci.org/ab/sixword.svg)
+[![Gem Version](https://badge.fury.io/rb/sixword.svg)](https://rubygems.org/gems/sixword)
+[![Build status](https://travis-ci.org/ab/sixword.svg)](https://travis-ci.org/ab/sixword)
+[![Code Climate](https://codeclimate.com/github/ab/sixword.svg)](https://codeclimate.com/github/ab/sixword)
+[![Inline Docs](http://inch-ci.org/github/ab/sixword.svg?branch=master)](http://www.rubydoc.info/github/ab/sixword/master)
 
 Sixword implements the 6-word binary encoding created for S/Key (tm) and
 standardized by RFC 2289, RFC 1760, and RFC 1751. Binary data may be
