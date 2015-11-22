@@ -14,218 +14,145 @@ Style/StringLiterals:
 Lint/LiteralInCondition:
   Enabled: false
 
-# TODO
-# Offense count: 6
-Lint/UselessAssignment:
-  Exclude:
-    - 'spec/sixword/hex_spec.rb'
-
-# TODO
-# Offense count: 6
-Lint/Void:
-  Exclude:
-    - 'spec/sixword/hex_spec.rb'
-    - 'spec/sixword/lib_spec.rb'
-    - 'spec/sixword_spec.rb'
-
-# TODO
 # Offense count: 6
 Metrics/AbcSize:
-  Max: 45
+  Max: 50
 
-# TODO
 # Offense count: 1
 Metrics/BlockNesting:
   Max: 4
 
-# TODO
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 156
+  Enabled: false
 
-# TODO
 # Offense count: 4
 Metrics/CyclomaticComplexity:
-  Max: 10
+  Max: 15
 
-# TODO
 # Offense count: 12
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
-  Max: 89
+  Max: 45
+  Exclude:
+    - bin/sixword
 
-# TODO
 # Offense count: 2
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
-  Max: 262
+  Enabled: false
 
-# TODO
 # Offense count: 3
 Metrics/PerceivedComplexity:
-  Max: 10
+  Max: 15
 
-# TODO
 # Offense count: 256
 # Cop supports --auto-correct.
 Style/AlignArray:
   Exclude:
     - 'lib/sixword/words.rb'
 
-# TODO
 # Offense count: 5
 Style/ConstantName:
-  Exclude:
-    - 'lib/sixword/hex.rb'
-    - 'spec/sixword/hex_spec.rb'
-    - 'spec/test_vectors.rb'
+  Enabled: false
 
-# TODO
-# Offense count: 4
 # Configuration parameters: Exclude.
+#
+# We could re-enable this if it understood that the top level module should
+# *not* be documented in files that are not the first to define it.
+#
 Style/Documentation:
+  Enabled: false
   Exclude:
     - 'spec/**/*'
     - 'test/**/*'
-    - 'lib/sixword/hex.rb'
-    - 'lib/sixword/lib.rb'
-    - 'lib/sixword/version.rb'
-    - 'lib/sixword/words.rb'
 
-# TODO
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
+# ********************************
+# Disagree with these style points
+# ********************************
+
 Style/DotPosition:
   Enabled: false
-
-# TODO
-# Offense count: 2
 Style/DoubleNegation:
-  Exclude:
-    - 'lib/sixword/hex.rb'
-
-# TODO
-# Offense count: 2
-# Cop supports --auto-correct.
+  Enabled: false
 Style/EmptyLines:
-  Exclude:
-    - 'lib/sixword/cli.rb'
-    - 'spec/sixword/lib_spec.rb'
-
-# TODO
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
+  Enabled: false
 Style/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'lib/sixword/cli.rb'
-
-# TODO
-# Offense count: 1
-# Cop supports --auto-correct.
+  Enabled: false
 Style/EmptyLinesAroundMethodBody:
-  Exclude:
-    - 'lib/sixword/lib.rb'
-
-# TODO
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
+  Enabled: false
 Style/EmptyLinesAroundModuleBody:
-  Exclude:
-    - 'lib/sixword.rb'
-    - 'lib/sixword/cli.rb'
-    - 'lib/sixword/words.rb'
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
 
-# TODO
-# Offense count: 1
+# Don't favor modifier style ever.
+Style/IfUnlessModifier:
+  Enabled: false
+Style/WhileUntilModifier:
+  Enabled: false
+
+Style/InfiniteLoop:
+  Enabled: false
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%w': '{}'
+    '%W': '{}'
+Style/RaiseArgs:
+  EnforcedStyle: compact
+Style/RedundantReturn:
+  Enabled: false
+Style/Alias:
+  Enabled: false
+Style/SignalException:
+  EnforcedStyle: only_raise
+Style/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+# Arguable
+# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
+Style/SpaceInsideBlockBraces:
+  Enabled: false
+
+# Arguable
+# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
+Style/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+# TODO this is affected by rubocop bug
+# https://github.com/bbatsov/rubocop/issues/2448
+#
+# Offense count: 27
 # Cop supports --auto-correct.
-Style/EvenOdd:
-  Exclude:
-    - 'lib/sixword/hex.rb'
+# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
+Style/TrailingComma:
+  # SupportedStyles:
+  #   - comma
+  #   - no_comma
+  EnforcedStyleForMultiline: comma
 
-# TODO
-# Offense count: 2
+# Don't favor %w for arrays of words.
+Style/WordArray:
+  Enabled: false
+
+# ********************************
+
 # Configuration parameters: AllowedVariables.
 Style/GlobalVars:
   Exclude:
-    - 'spec/rspec_helper.rb'
+    - 'spec/spec_helper.rb'
 
-# TODO
-# Offense count: 3
-# Configuration parameters: MinBodyLength.
-Style/GuardClause:
-  Exclude:
-    - 'lib/sixword/cli.rb'
-    - 'spec/rspec_helper.rb'
-
-# TODO
-# Offense count: 9
-# Cop supports --auto-correct.
-# Configuration parameters: MaxLineLength.
-Style/IfUnlessModifier:
-  Exclude:
-    - 'lib/sixword.rb'
-    - 'lib/sixword/cli.rb'
-    - 'lib/sixword/hex.rb'
-    - 'spec/rspec_helper.rb'
-
-# TODO
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/InfiniteLoop:
-  Exclude:
-    - 'lib/sixword/cli.rb'
-
-# TODO
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/LeadingCommentSpace:
-  Exclude:
-    - 'lib/sixword/cli.rb'
-
-# TODO
-# Offense count: 1
-# Cop supports --auto-correct.
+# I disagree with this cop for the specific case of
+#   if !foo.empty?
+# because I think it's a shame that ruby has no nonempty? predicate, and it's
+# clearer if the double negative is all on the RHS.
+#
 Style/NegatedIf:
   Exclude:
     - 'lib/sixword/cli.rb'
 
-# TODO
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Exclude:
-    - 'spec/sixword/lib_spec.rb'
-
-# TODO
-# Offense count: 23
-# Configuration parameters: SupportedStyles.
-Style/RaiseArgs:
-  EnforcedStyle: compact
-
-# TODO
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowMultipleReturnValues.
-Style/RedundantReturn:
-  Exclude:
-    - 'lib/sixword/lib.rb'
-
-# TODO
-# Offense count: 20
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/SignalException:
-  Exclude:
-    - 'lib/sixword.rb'
-    - 'lib/sixword/cli.rb'
-    - 'lib/sixword/hex.rb'
-    - 'lib/sixword/lib.rb'
-
+# Torn on this one, not really sure what improves clarity.
 # TODO
 # Offense count: 7
 # Cop supports --auto-correct.
@@ -234,72 +161,14 @@ Style/SpaceAfterColon:
     - 'lib/sixword.rb'
     - 'lib/sixword/cli.rb'
 
-# TODO
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: SupportedStyles.
-Style/SpaceAroundEqualsInParameterDefault:
-  EnforcedStyle: no_space
-
-# TODO
-# Offense count: 7
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-Style/SpaceInsideBlockBraces:
-  Enabled: false
-
-# TODO
 # Offense count: 2
-# Cop supports --auto-correct.
 Style/SpaceInsideBrackets:
   Exclude:
     - 'lib/sixword/words.rb'
 
-# TODO
-# Offense count: 9
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
-Style/SpaceInsideHashLiteralBraces:
-  Enabled: false
-
-# TODO
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/SpecialGlobalVars:
   Exclude:
     - 'bin/sixword'
     - 'sixword.gemspec'
-
-# TODO
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/TrailingBlankLines:
-  Exclude:
-    - 'Rakefile'
-
-# TODO
-# Offense count: 27
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-Style/TrailingComma:
-  Exclude:
-    - 'spec/sixword/hex_spec.rb'
-    - 'spec/sixword/lib_spec.rb'
-    - 'spec/sixword_spec.rb'
-    - 'spec/test_vectors.rb'
-
-# TODO
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: MaxLineLength.
-Style/WhileUntilModifier:
-  Exclude:
-    - 'lib/sixword/lib.rb'
-
-# TODO
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: WordRegex.
-Style/WordArray:
-  MinSize: 2048

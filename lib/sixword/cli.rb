@@ -171,7 +171,7 @@ module Sixword
       while true
         buf = stream.read(block_size)
         if buf.nil?
-          break #EOF
+          break # EOF
         end
 
         buf.scan(/\S+/) do |word|

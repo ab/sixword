@@ -1,4 +1,5 @@
 module Sixword
+  # Various hexadecimal string encoding and decoding functions
   module Hex
     HexValid = /\A[a-fA-F0-9]+\z/
     HexStrip = /[\s:.-]+/
@@ -39,7 +40,7 @@ module Sixword
         raise ArgumentError.new("Invalid value for hex: #{hex_string.inspect}")
       end
 
-      unless hex_string.length % 2 == 0
+      unless hex_string.length.even?
         raise ArgumentError.new("Odd length hex: #{hex_string.inspect}")
       end
 
