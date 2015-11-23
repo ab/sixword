@@ -91,7 +91,12 @@ Options:
     end
   end
 
-  optparse.parse!
+  begin
+    optparse.parse!
+  rescue OptionParser::InvalidOption => err
+    puts_err(err.message)
+    exit 1
+  end
 
   case ARGV.length
   when 0
