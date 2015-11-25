@@ -45,7 +45,7 @@ module Sixword
           'RASH BUSH MILK LOOK BAD BRIM AVID GAFF BAIT ROT POD LOVE',
         'EFF8 1F9B FBC6 5350 920C DD74 16DE 8009' =>
           'TROD MUTE TAIL WARM CHAR KONG HAAG CITY BORE O TEAL AWL',
-      }
+      },
     }
 
     # from RFC 2289

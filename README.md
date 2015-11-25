@@ -49,9 +49,69 @@ Or install it yourself as:
 
     $ gem install sixword
 
-## Usage
+## Usage: Command Line
 
-TODO: Write usage instructions here
+Sixword operates similarly to `base64(1)`, it operates on a file or on STDIN in two modes:
+
+- encode: accept binary data (or hexadecimal in hex modes) and print six-word
+  encoded data on stdout.
+- decode: accept six-word encoded data and print binary data (or hex) on
+  stdout.
+
+### Examples
+
+Normal encoding and decoding
+
+    $ sixword <<< 'Testing'
+    BEAK NET SITE ROTH SWIM FORM
+
+    $ sixword -d <<< 'BEAK NET SITE ROTH SWIM FORM'
+    Testing
+
+    $ sixword -d <<< 'beak net site roth swim form'
+    Testing
+
+The same data, but hex encoded
+
+    $ sixword -H <<< '54:65:73:74:69:6e:67:0a'
+    BEAK NET SITE ROTH SWIM FORM
+
+    $ sixword -dH <<< 'BEAK NET SITE ROTH SWIM FORM'
+    54657374696e670a
+
+    $ sixword -dF <<< 'BEAK NET SITE ROTH SWIM FORM'
+    5465 7374 696E 670A
+
+    $ sixword -d -S colons <<< 'BEAK NET SITE ROTH SWIM FORM'
+    54:65:73:74:69:6e:67:0a
+
+Error handling
+
+    $ sixword -d <<< 'BEAK NET SITE ROTH SWIM FOR'
+    sixword: Parity bits do not match
+    [exit status 3]
+
+    $ sixword -p <<< '.'
+    sixword: Must pad bytes to multiple of 8 or use pad_encode
+
+## Usage: Library
+
+See the [YARD documentation](http://www.rubydoc.info/github/ab/sixword/master).
+The top-level `Sixword` module contains the main API (`Sixword.encode` and
+`Sixword.decode`), while various utilities can be found in `Sixword::Hex` and
+`Sixword::Lib`. Most of the code powering the command line interface is in
+`Sixword::CLI`.
+
+    >> require 'sixword'
+
+    >> Sixword.encode('Hi world')
+    => ["ACRE", "ADEN", "INN", "SLID", "MAD", "PAP"]
+
+    >> Sixword.decode(["ACRE", "ADEN", "INN", "SLID", "MAD", "PAP"])
+    => 'Hi world'
+
+    >> Sixword.decode("acre aden inn slid mad pap")
+    => 'Hi world'
 
 ## Contributing
 

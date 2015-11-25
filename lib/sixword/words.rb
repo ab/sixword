@@ -264,6 +264,7 @@ module Sixword
   WORDS.freeze
   WORDS.each(&:freeze)
 
+  # A mapping from Word => Integer index in the word list
   WORDS_HASH = Hash[WORDS.each_with_index.to_a]
   WORDS_HASH.freeze
 end

@@ -13,4 +13,3 @@ def alias_task(alias_task, original)
   task alias_task, Rake.application[original].arg_names => original
 end
 alias_task(:test, :spec)
-
