@@ -1,5 +1,10 @@
 module Sixword
+
+  # The Lib module contains various internal utility functions. They are not
+  # really part of the public API and will probably not be useful to external
+  # callers.
   module Lib
+
     # Encode an array of 8 bytes as an array of 6 words.
     #
     # @param byte_array [Array<Fixnum>] An array of length 8 containing
@@ -139,6 +144,12 @@ module Sixword
         map(&:chr).join
     end
 
+    # Given a word, return the 11 bits it represents as an integer (i.e. its
+    # index in the WORDS list).
+    #
+    # @param word [String]
+    # @return [Fixnum] An integer 0..2047
+    #
     def self.word_to_bits(word)
       word = word.upcase
       return WORDS_HASH.fetch(word)
