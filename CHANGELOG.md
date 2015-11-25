@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.3.2] -- 2015-11-25
+
 - Add lots of documentation and a change log!
 - Upgrade tests to rspec 3.
 - Introduce rubocop style config and fix lots of warnings.
