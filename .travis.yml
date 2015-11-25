@@ -7,3 +7,4 @@ rvm:
   - "jruby-19mode"
 script:
   bundle exec rake test
+sudo: false
