@@ -165,16 +165,15 @@ module Sixword
 
     # Yield data 6 words at a time until EOF
     def read_input_by_6_words
-      block_size = 2048
       word_arr = []
 
       while true
-        buf = stream.read(block_size)
-        if buf.nil?
+        line = stream.gets
+        if line.nil?
           break # EOF
         end
 
-        buf.scan(/\S+/) do |word|
+        line.scan(/\S+/) do |word|
           word_arr << word
 
           # return the array if we have accumulated 6 words
