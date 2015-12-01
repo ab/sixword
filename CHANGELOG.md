@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.3.3] -- 2015-12-01
+
 - Fix handling of words that straddle the 2048-byte buffer boundary. Previously
   any word that was split over the boundary would be mangled into two words,
   resulting in an error or incorrect output. This only affected the sixword
