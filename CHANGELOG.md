@@ -4,6 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+- Fix handling of words that straddle the 2048-byte buffer boundary. Previously
+  any word that was split over the boundary would be mangled into two words,
+  resulting in an error or incorrect output. This only affected the sixword
+  CLI. [#3](https://github.com/ab/sixword/issues/3)
+
 ## [0.3.2] -- 2015-11-25
 
 - Add lots of documentation and a change log!
