@@ -79,7 +79,7 @@ The same data, but hex encoded
     $ sixword -dH <<< 'BEAK NET SITE ROTH SWIM FORM'
     54657374696e670a
 
-    $ sixword -dF <<< 'BEAK NET SITE ROTH SWIM FORM'
+    $ sixword -df <<< 'BEAK NET SITE ROTH SWIM FORM'
     5465 7374 696E 670A
 
     $ sixword -d -S colons <<< 'BEAK NET SITE ROTH SWIM FORM'
