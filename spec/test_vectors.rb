@@ -4,7 +4,7 @@ module Sixword
     # from RFC 2289 and RFC 1751
     HexTests = {
       'rfc2289 parity' => {
-        '85c43ee03857765b' => 'FOWL KID MASH DEAD DUAL OAF',
+        '85C4 3EE0 3857 765B' => 'FOWL KID MASH DEAD DUAL OAF',
       },
       'rfc2289 md4' => {
         'D185 4218 EBBB 0B51' => 'ROME MUG FRED SCAN LIVE LACE',
