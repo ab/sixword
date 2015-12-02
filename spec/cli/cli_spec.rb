@@ -23,6 +23,15 @@ RSpec.describe Sixword::CLI do
   SixwordExecutable = File.dirname(__FILE__) + '/../../bin/sixword'
 
   def run_sixword(opts, input_string, expected_output, expected_exitstatus=0)
+
+    # hack around IO.popen stderr behavior in ruby 1.9
+    if RUBY_VERSION.start_with?('1.9') && expected_exitstatus != 0 &&
+       (expected_output.is_a?(Regexp) || !expected_output.empty?)
+
+      warn "test warning: overriding output #{expected_output.inspect} with ''"
+      expected_output = ''
+    end
+
     run([SixwordExecutable] + opts, input_string, expected_output, expected_exitstatus)
   end
 
