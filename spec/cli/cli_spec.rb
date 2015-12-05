@@ -1,10 +1,31 @@
 RSpec.describe Sixword::CLI do
 
+  @@test_warnings = Set.new
+  def warn_once(label, message)
+    unless @@test_warnings.include?(label)
+      warn message
+      @@test_warnings << label
+    end
+  end
+
+  if RUBY_ENGINE == 'jruby' && JRUBY_VERSION.start_with?('1.7')
+    $running_jruby_17 = true
+  else
+    $running_jruby_17 = false
+  end
+
   # Run a command with input and validate the expected output and exit status.
   def run(cmd, input_string, expected_output, expected_exitstatus=0)
     output = nil
 
-    IO.popen(cmd, 'r+', err: [:child, :out]) do |p|
+    if $running_jruby_17
+      warn_once('jruby17', 'test warning: skipping unsupported popen option :err')
+      opts = {}
+    else
+      opts = {err: [:child, :out]}
+    end
+
+    IO.popen(cmd, 'r+', opts) do |p|
       p.write(input_string)
       p.close_write
       output = p.read
@@ -16,7 +37,7 @@ RSpec.describe Sixword::CLI do
       expect(output).to eq(expected_output)
     end
 
-    expect($?.exited?).to eq(true)
+    expect($?.exited?).to eq(true) unless $running_jruby_17
     expect($?.exitstatus).to eq(expected_exitstatus)
   end
 
@@ -28,7 +49,7 @@ RSpec.describe Sixword::CLI do
     if RUBY_VERSION.start_with?('1.9') && expected_exitstatus != 0 &&
        (expected_output.is_a?(Regexp) || !expected_output.empty?)
 
-      warn "test warning: overriding output #{expected_output.inspect} with ''"
+      warn_once('ruby19', "test warning: overriding output #{expected_output.inspect} with ''")
       expected_output = ''
     end
 
