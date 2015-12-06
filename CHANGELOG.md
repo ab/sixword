@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+- Add multi-sentence output option for encoding mode (-w, --line-width). This
+  allows users to output multiples of 6 words on a line when encoding.
+
 ## [0.3.3] -- 2015-12-01
 
 - Fix handling of words that straddle the 2048-byte buffer boundary. Previously
