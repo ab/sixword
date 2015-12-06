@@ -127,4 +127,18 @@ RSpec.describe Sixword::CLI do
       run_sixword(['-d'], encoded_s, binary)
     end
   end
+
+  it 'should encode N sentences per line' do
+    input = 'The quick brown fox jump'
+
+    {
+      0 => "BEAK US ACHE SOUR BERN LOLA CORE ARC HULK SLID DREW DUE CHUB ENDS BOG RUSS BESS MAST\n",
+      1 => "BEAK US ACHE SOUR BERN LOLA\nCORE ARC HULK SLID DREW DUE\nCHUB ENDS BOG RUSS BESS MAST\n",
+      2 => "BEAK US ACHE SOUR BERN LOLA CORE ARC HULK SLID DREW DUE\nCHUB ENDS BOG RUSS BESS MAST\n",
+      3 => "BEAK US ACHE SOUR BERN LOLA CORE ARC HULK SLID DREW DUE CHUB ENDS BOG RUSS BESS MAST\n",
+      4 => "BEAK US ACHE SOUR BERN LOLA CORE ARC HULK SLID DREW DUE CHUB ENDS BOG RUSS BESS MAST\n",
+    }.each_pair do |width, expected_output|
+      run_sixword(['-e', '-w %d' % width], input, expected_output)
+    end
+  end
 end

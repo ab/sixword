@@ -27,6 +27,8 @@ module Sixword
     # @option options [:encode, :decode] :mode (:encode)
     # @option options [Boolean] :pad (false)
     # @option options [String] :hex_style
+    # @option options [Integer] :line_width (1) In encode mode, the number of
+    #   sentences to output per line.
     #
     def initialize(filename, options)
       @filename = filename
@@ -125,10 +127,28 @@ module Sixword
     end
 
     def do_encode!
+      sentences_per_line = options.fetch(:line_width, 1)
+      if sentences_per_line <= 0
+        sentences_per_line = 1 << 32
+      end
+
+      sentences = []
+
       process_encode_input do |chunk|
         Sixword.encode_iter(chunk, words_per_slice:6, pad:pad?) do |encoded|
-          yield encoded
+          sentences << encoded
+
+          # yield sentences once we reach sentences_per_line of them
+          if sentences.length >= sentences_per_line
+            yield sentences.join(' ')
+            sentences.clear
+          end
         end
+      end
+
+      # yield any leftover sentences
+      unless sentences.empty?
+        yield sentences.join(' ')
       end
     end
 

@@ -86,8 +86,15 @@ Options:
       options[:hex_style] = 'lowercase'
     end
 
-    opts.on('-f', '--fingerprint', 'Short for --hex-style fingerprint') do
+    opts.on('-f', '--fingerprint', 'Short for --hex-style fingerprint', ' ') do
       options[:hex_style] = 'fingerprint'
+    end
+
+    #
+
+    opts.on('-w', '--line-width NUM',
+            'Print NUM sentences per line when encoding') do |arg|
+      options[:line_width] = Integer(arg)
     end
   end
 
