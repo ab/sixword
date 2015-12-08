@@ -96,7 +96,8 @@ module Sixword
 
       # check parity
       unless parity_int(int) == parity
-        raise InvalidParity.new("Parity bits do not match")
+        raise InvalidParity.new("Parity bits do not match: " +
+                                word_array.join(' ').inspect)
       end
 
       # omit padding bits, if any

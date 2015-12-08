@@ -1,10 +1,10 @@
 RSpec.describe Sixword::CLI do
 
-  @@test_warnings = Set.new
+  TestWarnings = Set.new
   def warn_once(label, message)
-    unless @@test_warnings.include?(label)
+    unless TestWarnings.include?(label)
       warn message
-      @@test_warnings << label
+      TestWarnings << label
     end
   end
 
