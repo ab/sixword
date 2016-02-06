@@ -258,11 +258,7 @@ module Sixword
     "WITH",  "WOLF",  "WONT",  "WOOD",  "WOOL",  "WORD",  "WORE",  "WORK",
     "WORM",  "WORN",  "WOVE",  "WRIT",  "WYNN",  "YALE",  "YANG",  "YANK",
     "YARD",  "YARN",  "YAWL",  "YAWN",  "YEAH",  "YEAR",  "YELL",  "YOGA",
-    "YOKE"   ]
-
-  # mutability sucks
-  WORDS.freeze
-  WORDS.each(&:freeze)
+    "YOKE"   ].map(&:freeze).freeze
 
   # A mapping from Word => Integer index in the word list
   WORDS_HASH = Hash[WORDS.each_with_index.to_a]

@@ -120,13 +120,10 @@ Style/SpaceInsideBlockBraces:
 Style/SpaceInsideHashLiteralBraces:
   Enabled: false
 
-# TODO this is affected by rubocop bug
-# https://github.com/bbatsov/rubocop/issues/2448
-#
 # Offense count: 27
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-Style/TrailingComma:
+Style/TrailingCommaInLiteral:
   # SupportedStyles:
   #   - comma
   #   - no_comma
@@ -134,6 +131,10 @@ Style/TrailingComma:
 
 # Don't favor %w for arrays of words.
 Style/WordArray:
+  Enabled: false
+
+# Definitely do NOT assign variables within a conditional. Christ.
+Style/ConditionalAssignment:
   Enabled: false
 
 # ********************************
