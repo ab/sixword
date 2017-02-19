@@ -1,10 +1,11 @@
 language: ruby
 rvm:
-  - "1.9.3"
   - "2.0.0"
   - "2.1" # latest 2.1.x
   - "2.2" # latest 2.2.x
-  - "jruby-19mode"
+  - "2.3"
+  - "2.4"
+  - "jruby-9.1.5.0"
   - "jruby-head"
 script:
   bundle exec rake test
