@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.3.5] -- 2018-03-28
+
+- Fix up rubocop config etc.
+
 ## [0.3.4] -- 2015-12-06
 
 - Add multi-sentence output option for encoding mode (-w, --line-width). This
