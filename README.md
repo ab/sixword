@@ -1,7 +1,7 @@
 # Sixword
 
 [![Gem Version](https://badge.fury.io/rb/sixword.svg)](https://rubygems.org/gems/sixword)
-[![Build status](https://travis-ci.org/ab/sixword.svg)](https://travis-ci.org/ab/sixword)
+[![Build status](https://github.com/ab/sixword/actions/workflows/tests.yml/badge.svg)](https://github.com/ab/sixword/actions/workflows/tests.yml)
 [![Code Climate](https://codeclimate.com/github/ab/sixword.svg)](https://codeclimate.com/github/ab/sixword)
 [![Inline Docs](http://inch-ci.org/github/ab/sixword.svg?branch=master)](http://www.rubydoc.info/github/ab/sixword/master)
 
