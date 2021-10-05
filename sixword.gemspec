@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'sixword'
   spec.version       = Sixword::VERSION
   spec.authors       = ['Andy Brody']
-  spec.email         = ['abrody@abrody.com']
+  spec.email         = ['git@abrody.com']
   spec.summary       = 'Implementation of RFC 2289 compatible 6-word encoding'
   spec.description   = <<-EOM
     Sixword implements the 6-word binary encoding created for S/Key (tm) and
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.3'
+  spec.add_development_dependency 'bundler', '~> 2.2'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3.0'
