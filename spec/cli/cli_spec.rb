@@ -1,3 +1,5 @@
+require 'set'
+
 RSpec.describe Sixword::CLI do
 
   TestWarnings = Set.new
