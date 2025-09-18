@@ -17,50 +17,41 @@ usage: #{BaseName} [OPTION]... [FILE]
 
 Six-word encode or decode FILE, or standard input, to standard output.
 
-The data are encoded using the 2048 word dictionary created for S/Key (tm) and
-standardized by RFC 2289, RFC 1760, and RFC 1751. It also supports an optional
-custom padding scheme to allow for messages that are not a multiple of 8 bytes.
+Binary encoding for humans
+
+#{BaseName} is similar to base64, but intended for humans to read and type.
+The six-word encoding uses a dictionary of 2048 short English words.
+Each 8-byte input becomes 6 words of output, including 2 checksum bits.
+This makes it easy to read and type quickly with built-in error checking.
+
+Use cases include sharing cryptographic keys on paper, verifying fingerprints,
+or comparing binary data.
+
+The six-word encoding was created for S/Key (tm) and standardized by RFC 2289,
+RFC 1760, and RFC 1751. This #{BaseName} implementation also supports an
+optional non-standard padding scheme to allow for messages that are not a
+multiple of 8 bytes.
 
 With no FILE, or when FILE is -, read standard input.
-
-#{BaseName} understands a few different styles of hexadecimal input and output.
-When encoding, the input will first be decoded to binary data before being
-encoded to words. When decoding, the output will be encoded in hex.
-
-
-Hex styles:
-
-  lower/lowercase:
-    Accept a variety of inputs, but don't include whitespace in output.
-
-    Encoding:
-      '48:69:20:77:6f:72:6c:64' => 'Hi world' => 'ACRE ADEN INN SLID MAD PAP'
-    Decoding:
-      'ACRE ADEN INN SLID MAD PAP' => 'Hi world' => '486920776f726c64'
-
-  finger/fingerprint:
-    Accept a variety of inputs, and include whitespace in output.
-    This is intended to look something like GPG fingerprints.
-
-    Encoding:
-      '4869 2077 6F72 6C64' => 'Hi world' => 'ACRE ADEN INN SLID MAP PAP'
-    Decoding:
-      'ACRE ADEN INN SLID MAP PAP' => 'Hi world' => '4869 2077 6F72 6C64'
-
 
 Options:
     EOM
 
-    opts.on('-h', '--help', 'Display this message', ' ') do
+    opts.on('-h', '--help', 'Display this message') do
       $stderr.puts opts, ''
       exit 0
     end
-    opts.on('-v', '--version', 'Print version number', ' ') do
+
+    # --
+    opts.separator('')
+
+    opts.on('-v', '--version', 'Print version number') do
       puts 'sixword ' + Sixword::VERSION
       exit 0
     end
 
-    #
+    # --
+    opts.separator('')
 
     opts.on('-d', '--decode', 'Decode data') do
       options[:mode] = :decode
@@ -70,32 +61,137 @@ Options:
       options[:mode] = :encode
     end
 
-    opts.on('-p', '--no-pad', "Don't use custom padding scheme", ' ') do
+    opts.on('-p', '--no-pad', "Don't use custom padding scheme") do
       options[:pad] = false
     end
 
-    #
+    # --
+    opts.separator('')
 
-    opts.on('-S', '--hex-style STYLE',
-            'Treat input (when encoding) or print',
-            'output (when decoding) as hex') do |style|
-      options[:hex_style] = style
+    opts.on('-S', '--style STYLE',
+            'Use STYLE as format/coding for plain text') do |style|
+      options[:style] = style
+    end
+
+    opts.on('--hex-style STYLE', 'Alias for --style') do |style|
+      options[:style] = style
+    end
+
+    opts.on('-B', '--base64', 'Use base64 input/output') do
+      options[:style] = 'base64'
     end
 
     opts.on('-H', '--hex', 'Short for --hex-style lowercase') do
-      options[:hex_style] = 'lowercase'
+      options[:style] = 'lowercase'
     end
 
-    opts.on('-f', '--fingerprint', 'Short for --hex-style fingerprint', ' ') do
-      options[:hex_style] = 'fingerprint'
+    opts.on('-f', '--fingerprint', 'Short for --hex-style fingerprint') do
+      options[:style] = 'fingerprint'
     end
 
-    #
+    # --
+    opts.separator('')
 
     opts.on('-w', '--line-width NUM',
             'Print NUM sentences per line when encoding') do |arg|
       options[:line_width] = Integer(arg)
     end
+
+    opts.separator('')
+
+
+    opts.separator <<-EOM
+Encoding Styles:
+
+#{BaseName} understands a few different styles of hexadecimal input and output.
+When encoding, the input will first be decoded to binary data before being
+encoded to words. When decoding, the output will be encoded in hex.
+
+The --style STYLE option can be used to encode to / decode from formats other
+than raw binary bytes. This is useful when interacting with binary data like a
+key that is already encoded in hex or base64.
+
+For example, with --style base64, input for encode is assumed to be base64, and
+output from decode will be base64.
+
+This table shows how the 8 bytes "Hi world" would be encoded in each style.
+(Sixword: "ACRE ADEN INN SLID MAD PAP")
+
+  ╭─────────────────────┬─────────────────────────╮
+  │        Style        │   Example input/output  │
+  ├─────────────────────┼─────────────────────────┤
+  │ <default>           │ Hi world                │
+  │ base64              │ SGkgd29ybGQ=            │
+  │ lower, lowercase    │ 486920776f726c64        │
+  │ finger, fingerprint │ 4869 2077 6F72 6C64     │
+  │ colons              │ 48:69:20:77:6f:72:6c:64 │
+  ╰─────────────────────┴─────────────────────────╯
+
+The hex styles all accept hexadecimal input in a variety of formats.
+They allow `a-fA-F0-9` and ignore whitespace and certain punctuation: `:.-`
+(colon, period, hyphen).
+
+Examples:
+
+  Normal encoding and decoding:
+
+    $ echo 'Testing' | sixword
+    BEAK NET SITE ROTH SWIM FORM
+
+    $ sixword -d <<< 'BEAK NET SITE ROTH SWIM FORM'
+    Testing
+
+    $ sixword -d <<< 'beak net site roth swim form'
+    Testing
+
+
+  Random 128-bit (16 byte) key:
+
+    $ head -c 16 /dev/urandom | sixword
+    THIS IOTA DOUG FELT OIL MITT
+    LIED LAIN AND HULK MADE LAUD
+
+    $ cat > key.txt
+    this iota doug felt oil mitt
+    lied lain and hulk made laud
+
+    $ sixword -d key.txt | xxd
+    00000000: eab3 ddd7 bf92 f179 ae35 3008 ce4b 5b56  .......y.50..K[V
+
+
+  With encoding styles:
+
+    $ sixword -H <<< '54:65:73:74:69:6e:67:0a'
+    BEAK NET SITE ROTH SWIM FORM
+
+    $ sixword -dH <<< 'BEAK NET SITE ROTH SWIM FORM'
+    54657374696e670a
+
+    $ sixword -df <<< 'BEAK NET SITE ROTH SWIM FORM'
+    5465 7374 696E 670A
+
+    $ sixword -d --style colons <<< 'BEAK NET SITE ROTH SWIM FORM'
+    54:65:73:74:69:6e:67:0a
+
+    $ sixword -d --style base64 <<< 'BEAK NET SITE ROTH SWIM FORM'
+    VGVzdGluZwo=
+
+    $ sixword -d <<< 'BEAK NET SITE ROTH SWIM FORM' | base64
+    VGVzdGluZwo=
+
+
+  Errors:
+
+    $ sixword -d <<< 'BEAK NET SITE ROTH SWIM FOR'
+    sixword: Parity bits do not match
+    [exit status 3]
+
+    $ echo 'abc' | sixword --no-pad
+    sixword: Must pad bytes to multiple of 8 or use pad_encode
+    [exit status 10]
+
+    EOM
+
   end
 
   begin

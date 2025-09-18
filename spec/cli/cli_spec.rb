@@ -80,7 +80,7 @@ RSpec.describe Sixword::CLI do
   end
 
   it 'returns expected error codes in various conditions' do
-    run_sixword(%w{-e --hex-style nonexistent}, '', /unknown hex style/, 2)
+    run_sixword(%w{-e --hex-style nonexistent}, '', /unknown style/, 2)
     run_sixword(['-d'], "BEAK NET SITE ROTH SWIM FOR\n", /Parity bits do not match/, 3)
     run_sixword(['-d'], "ZZZ A A A A A\n", /Unknown word: "ZZZ"/, 4)
     run_sixword(['-d'], "AAAAAA A A A A A\n", /1-4 chars/, 5)
@@ -100,12 +100,33 @@ RSpec.describe Sixword::CLI do
 
   it 'handles basic hex styles' do
     run_sixword(['-H'], "54:65:73:74:69:6e:67:0a\n", "BEAK NET SITE ROTH SWIM FORM\n")
+    run_sixword(%w{-e -S colons}, "54:65:73:74:69:6e:67:0a\n", "BEAK NET SITE ROTH SWIM FORM\n")
     run_sixword(['-H'], "54657374696e670a\n", "BEAK NET SITE ROTH SWIM FORM\n")
     run_sixword(['-H'], "5465 7374 696E 670A\n", "BEAK NET SITE ROTH SWIM FORM\n")
+    run_sixword(%w{-S lower}, "54657374696e670a\n", "BEAK NET SITE ROTH SWIM FORM\n")
 
     run_sixword(['-dH'], "BEAK NET SITE ROTH SWIM FORM\n", "54657374696e670a\n")
     run_sixword(['-df'], "BEAK NET SITE ROTH SWIM FORM\n", "5465 7374 696E 670A\n")
     run_sixword(%w{-d -S colons}, "BEAK NET SITE ROTH SWIM FORM\n", "54:65:73:74:69:6e:67:0a\n")
+  end
+
+  it 'handles base64' do
+    run_sixword(['--base64'], "VGVzdGluZwo=\n", "BEAK NET SITE ROTH SWIM FORM\n")
+    run_sixword(%w{-d --base64}, "BEAK NET SITE ROTH SWIM FORM\n", "VGVzdGluZwo=\n")
+    run_sixword(%w{-d -S base64}, "BEAK NET SITE ROTH SWIM FORM\n", "VGVzdGluZwo=\n")
+  end
+
+  it 'handles long base64' do
+    run_sixword(
+      %w{--base64},
+      "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1w",
+      "BEAK US ACHE SOUR BERN LOLA\nCORE ARC HULK SLID DREW DUE\nCHUB ENDS BOG RUSS BESS MAST\n"
+    )
+    run_sixword(
+      %w{-d --base64},
+      "BEAK US ACHE SOUR BERN LOLA\nCORE ARC HULK SLID DREW DUE\nCHUB ENDS BOG RUSS BESS MAST\n",
+      "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1w\n"
+    )
   end
 
   it 'should encode/decode RFC hex vectors correctly' do

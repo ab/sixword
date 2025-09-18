@@ -1,3 +1,5 @@
+require 'base64'
+
 module Sixword
 
   # The Sixword::CLI class implements all of the complex processing needed for
@@ -26,7 +28,8 @@ module Sixword
     #
     # @option options [:encode, :decode] :mode (:encode)
     # @option options [Boolean] :pad (false)
-    # @option options [String] :hex_style
+    # @option options [String] :style
+    # @option options [String] :hex_style Alias of :style
     # @option options [Integer] :line_width (1) In encode mode, the number of
     #   sentences to output per line.
     #
@@ -62,15 +65,25 @@ module Sixword
       mode == :encode
     end
 
+    # Return the value of the :style option.
+    # @return [String, nil]
+    def style
+      options[:style] || options[:hex_style]
+    end
+
     # Return the value of the :hex_style option.
+    # @deprecated Use {#style} instead.
     # @return [String, nil]
     def hex_style
-      options[:hex_style]
+      options[:style] || options[:hex_style]
     end
 
     # Format data as hex in various styles.
     def print_hex(data, chunk_index, cols=80)
       case hex_style
+      when 'b64', 'base64'
+        # encode as base64
+        print Base64.strict_encode64(data)
       when 'lower', 'lowercase'
         # encode to lowercase hex with no newlines
         print Sixword::Hex.encode(data)
@@ -121,8 +134,15 @@ module Sixword
         raise ArgumentError.new("block is required")
       end
 
-      read_input_by_6_words do |arr|
-        yield Sixword.decode(arr, padding_ok: pad?)
+      # base64 decoding must happen in one shot to avoid inserting unnecessary
+      # padding in the middle
+      if hex_style == 'base64' || hex_style == 'b64'
+        yield Sixword.decode(stream.read, padding_ok: pad?)
+      else
+        # chunk input in 6-word sentences
+        read_input_by_6_words do |arr|
+          yield Sixword.decode(arr, padding_ok: pad?)
+        end
       end
     end
 
@@ -157,7 +177,16 @@ module Sixword
         raise ArgumentError.new("block is required")
       end
 
-      if hex_style
+      if hex_style == "base64" || hex_style == "b64"
+        # Base64 needs 10.66 bytes to encode 8 binary bytes
+        # so we can't neatly chunk input like we can with hex.
+        # Instead just read the whole thing and yield in chunks of 8 bytes.
+        buf = Base64.decode64(stream.read)
+        buf.each_char.each_slice(8) do |chunk|
+          yield chunk.join
+        end
+
+      elsif hex_style
         # yield data in chunks from accumulate_hex_input until EOF
         accumulate_hex_input do |hex|
           begin
@@ -169,6 +198,7 @@ module Sixword
             yield data
           end
         end
+
       else
         # yield data 8 bytes at a time until EOF
         while true
@@ -219,8 +249,9 @@ module Sixword
       case hex_style
       when 'lower', 'lowercase'
       when 'finger', 'fingerprint'
+      when 'colon', 'colons'
       else
-        raise CLIError.new("unknown hex style: #{hex_style.inspect}")
+        raise CLIError.new("unknown style: #{hex_style.inspect}")
       end
 
       while true

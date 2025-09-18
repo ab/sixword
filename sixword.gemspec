@@ -8,13 +8,14 @@ Gem::Specification.new do |spec|
   spec.version       = Sixword::VERSION
   spec.authors       = ['Andy Brody']
   spec.email         = ['git@abrody.com']
-  spec.summary       = 'Implementation of RFC 2289 compatible 6-word encoding'
+  spec.summary       = 'Encode binary data for humans (RFC 2289 compatible 6-word encoding)'
   spec.description   = <<-EOM
-    Sixword implements the 6-word binary encoding created for S/Key (tm) and
-    standardized by RFC 2289, RFC 1760, and RFC 1751. Binary data may be
-    encoded using a dictionary of 2048 English words of 1-4 characters in
-    length. Each block of 64 bits is encoded using 6 words, which includes 2
-    parity bits. It is ideal for transmitting binary data such as cryptographic
+    Sixword encodes binary data in a human-friendly format using English words.
+    It uses the 6-word binary encoding created for S/Key (tm) and standardized
+    by RFC 2289, RFC 1760, and RFC 1751. Binary data is encoded using a
+    dictionary of 2048 short English words (1-4 letters in length). Each block
+    of 64 bits is encoded using 6 words, which includes 2 parity bits for error
+    checking. This is ideal for transmitting binary data such as cryptographic
     keys where humans must communicate or enter the values.
 
     See also: Bubble Babble, PGP Word List, Diceware, Base64, Base32
@@ -34,5 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 0.49'
   spec.add_development_dependency 'yard'
 
-  spec.required_ruby_version = '>= 1.9.3'
+  spec.add_dependency 'base64'
+
+  spec.required_ruby_version = '>= 3.0'
 end
