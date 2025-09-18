@@ -4,6 +4,15 @@ This project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.5.0] -- 2025-09-17
+
+- Require ruby version >= 3.0.
+- Update dependencies and test on newer ruby versions.
+- Add a base64 encoding/decoding mode.
+- Fix a minor bug with hex style colons.
+- Refactor help text to be easier to follow.
+
+
 ## [0.3.5] -- 2018-03-28
 
 - Fix up rubocop config etc.
